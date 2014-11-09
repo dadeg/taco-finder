@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html ng-app="ngSpApp">
+<head>
+  <title>Taco Finder</title>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+
+  <style>
+    html, body, .ng-scope { height: 100% }
+  </style>
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/apps/taco-finder/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="/apps/taco-finder/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="/apps/taco-finder/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="/apps/taco-finder/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="/apps/taco-finder/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apps/taco-finder/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="/apps/taco-finder/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apps/taco-finder/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apps/taco-finder/apple-touch-icon-180x180.png">
+  <link rel="icon" type="image/png" href="/apps/taco-finder/favicon-160x160.png" sizes="160x160">
+  <link rel="icon" type="image/png" href="/apps/taco-finder/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="/apps/taco-finder/favicon-16x16.png" sizes="16x16">
+  <link rel="icon" type="image/png" href="/apps/taco-finder/favicon-32x32.png" sizes="32x32">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-TileImage" content="/apps/taco-finder/mstile-144x144.png">
+
+
+</head>
+<body>
+
+					<div ng-view></div>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.js"></script>
+  <!-- script src='js/jquery-1.11.1.min.js'></script -->
+  <script src='js/lodash.js'></script>
+  <!-- script src='js/bluebird.js'></script -->
+  <script src='//maps.googleapis.com/maps/api/js?sensor=false'></script>
+  <script src="js/angular-google-maps.min.js"></script>
+
+  <script>
+    //
+    // Defining Module
+    //
+    var spApp = angular.module( "ngSpApp", ['ngRoute', 'google-maps'.ns()] );
+    //
+    // Defining Routes
+    //
+    spApp.config(function($routeProvider) {
+    	$routeProvider.otherwise({
+    		controller : 'HomeController',
+    		templateUrl: 'views/home.html'
+        });
+    });
+    //
+    // Controller for Home Page
+    //
+    spApp.controller('HomeController', function($scope) {
+      $scope.map = {
+          center: {
+              latitude: 45,
+              longitude: -73
+          },
+          zoom: 8
+      };
+    });
+
+  </script>
+
+
+</body>
+</html>
