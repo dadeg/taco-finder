@@ -29,7 +29,7 @@
 
 </head>
 <body>
-					<div ng-view></div>
+          <div ng-view></div>
 
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.js"></script>
@@ -50,9 +50,9 @@
     // Defining Routes
     //
     spApp.config(function($routeProvider) {
-    	$routeProvider.otherwise({
-    		controller : 'HomeController',
-    		templateUrl: 'views/home.html'
+      $routeProvider.otherwise({
+        controller : 'HomeController',
+        templateUrl: 'views/home.html'
         });
     });
 
@@ -78,27 +78,29 @@
           tilt: 45
         };
 
-        $scope.tacoMarker;
+        $scope.tacoMarkers = [];
 
-        var data = ngGPlacesAPI.nearbySearch(userLocation).then(
-        function(restaurants){
+        var data = ngGPlacesAPI.nearbySearch(userLocation).then(function(restaurants){
+          var tacoRestaurant;
           _(restaurants).forEach(function(restaurant) {
             if (restaurant.name.indexOf("") > -1) {
-              ngGPlacesAPI.placeDetails({reference:restaurant.reference}).then(
-              function (restaurantDetail) {
-
-                $scope.tacoMarker = {
-                  id: 0,
-                  coords: {
-                    latitude: restaurantDetail.geometry.location.k,
-                    longitude: restaurantDetail.geometry.location.B
-                  },
-                  options: {}
-                };
-              });
               // break forEach after the restaurant is found.
-              return false;
+              tacoRestaurant = restaurant;
+
             }
+          });
+
+          return tacoRestaurant;
+        }).then(function(restaurant) {
+          return ngGPlacesAPI.placeDetails({reference:restaurant.reference});
+        }).then(function (restaurantDetail) {
+          $scope.tacoMarkers.push({
+            id: 0,
+            coords: {
+              latitude: restaurantDetail.geometry.location.k,
+              longitude: restaurantDetail.geometry.location.B
+            },
+            options: {}
           });
         });
 
@@ -108,25 +110,6 @@
 
       });
     });
-
-
-
-
-
-
-
-    function createMarker(place) {
-      var placeLoc = place.geometry.location;
-      var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
-      });
-
-      google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
-      });
-    }
 
   </script>
 
