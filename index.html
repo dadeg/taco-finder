@@ -61,22 +61,24 @@
     //
     spApp.controller('HomeController', function($scope,ngGPlacesAPI) {
 
-      $scope.map = {
-        center: {
-          latitude: 30.240566,
-          longitude: -97.760997
-        },
-        zoom: 20,
-        tilt: 45
-      };
+
 
       navigator.geolocation.getCurrentPosition(function(position) {
+
+
+
         var userLocation = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude
         };
 
-        $scope.map.center = userLocation;
+        $scope.map = {
+          center: userLocation,
+          zoom: 12,
+          tilt: 45
+        };
+
+        $scope.tacoMarker;
 
         var data = ngGPlacesAPI.nearbySearch(userLocation).then(
         function(restaurants){
@@ -84,12 +86,17 @@
             if (restaurant.name.indexOf("") > -1) {
               ngGPlacesAPI.placeDetails({reference:restaurant.reference}).then(
               function (restaurantDetail) {
-                console.log(restaurantDetail.geometry.location);
-                $scope.map.center = {
-                  latitude: restaurantDetail.geometry.location.k,
-                  longitude: restaurantDetail.geometry.location.B
+
+                $scope.tacoMarker = {
+                  id: 0,
+                  coords: {
+                    latitude: restaurantDetail.geometry.location.k,
+                    longitude: restaurantDetail.geometry.location.B
+                  },
+                  options: {}
                 };
               });
+              // break forEach after the restaurant is found.
               return false;
             }
           });

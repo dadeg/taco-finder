@@ -1,6 +1,8 @@
 
-    <ui-gmap-google-map center="map.center" zoom="map.zoom"></ui-gmap-google-map>
-{{data}}
+    <ui-gmap-google-map center="map.center" zoom="map.zoom">
+      <ui-gmap-marker coords="tacoMarker.coords" idkey="tacoMarker.id" options="tacoMarker.options"></ui-gmap-marker>
+    </ui-gmap-google-map>
+
 
 <style>
   .angular-google-map-container, .angular-google-map { height:100%; }
