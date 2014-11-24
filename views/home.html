@@ -1,7 +1,10 @@
 
     <ui-gmap-google-map center="map.center" zoom="map.zoom">
-      <!--ui-gmap-marker coords="tacoMarker.coords" idkey="tacoMarker.id" options="tacoMarker.options"></ui-gmap-marker-->
-      <ui-gmap-markers models="tacoMarkers" coords="'coords'" icon="'icon'" idKey="'id'"></ui-gmap-markers>
+      <ui-gmap-markers models="tacoMarkers" coords="'coords'" icon="'icon'" idKey="'id'" click="'onClicked'">
+      <ui-gmap-windows show="'showWindow'" closeClick="'closeClick'" options="" ng-cloak>
+
+  <div>{{tacoDetails.name}}</div>
+                </ui-gmap-windows></ui-gmap-markers>
     </ui-gmap-google-map>
 
 

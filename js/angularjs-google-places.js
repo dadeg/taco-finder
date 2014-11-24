@@ -8,7 +8,7 @@ angular.module('ngGPlaces').
 provider('ngGPlacesAPI', function () {
 
     var defaults = {
-        radius: 5000,
+        radius: 500,
         sensor: false,
         latitude: null,
         longitude: null,
@@ -16,18 +16,34 @@ provider('ngGPlacesAPI', function () {
         map: null,
         elem: null,
         nearbySearchKeys: ['name', 'reference', 'vicinity'],
-        placeDetailsKeys: ['formatted_address', 'formatted_phone_number',
+        radarSearchKeys: ['geometry', 'place_id'],
+        placeDetailsKeys: ['name', 'formatted_address', 'formatted_phone_number',
             'reference', 'website', 'geometry'
         ],
         nearbySearchErr: 'Unable to find nearby places',
+        radarSearchErr: 'Unable to find places matching that keyword',
         placeDetailsErr: 'Unable to find place details',
         _nearbySearchApiFnCall: 'nearbySearch',
+        _radarSearchApiFnCall: 'radarSearch',
         _placeDetailsApiFnCall: 'getDetails'
     };
 
     var parseNSJSON = function (response) {
         var pResp = [];
         var keys = defaults.nearbySearchKeys;
+        response.map(function (result) {
+            var obj = {};
+            angular.forEach(keys, function (k) {
+                obj[k] = result[k];
+            });
+            pResp.push(obj);
+        });
+        return pResp;
+    };
+
+    var parseRSJSON = function (response) {
+        var pResp = [];
+        var keys = defaults.radarSearchKeys;
         response.map(function (result) {
             var obj = {};
             angular.forEach(keys, function (k) {
@@ -63,7 +79,7 @@ provider('ngGPlacesAPI', function () {
                 }
             }
             if (req._genLocation) {
-                req.location = new gMaps.LatLng(req.latitude, req.longitude);
+                req.location = createLatLng(req);
             }
             if (req.map) {
                 elem = req.map;
@@ -88,11 +104,20 @@ provider('ngGPlacesAPI', function () {
                 args._apiFnCall = defaults._nearbySearchApiFnCall;
                 return commonAPI(args);
             },
+            radarSearch: function (args) {
+                args._errorMsg = defaults.radarSearchErr;
+                args._parser = parseRSJSON;
+                args._apiFnCall = defaults._radarSearchApiFnCall;
+                return commonAPI(args);
+            },
             placeDetails: function (args) {
                 args._errorMsg = defaults.placeDetailsErr;
                 args._parser = parsePDJSON;
                 args._apiFnCall = defaults._placeDetailsApiFnCall;
                 return commonAPI(args);
+            },
+            createLatLng: function (req) {
+              return new gMaps.LatLng(req.latitude, req.longitude);
             }
         };
     };
